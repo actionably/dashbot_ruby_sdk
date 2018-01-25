@@ -33,7 +33,7 @@ module Dashbot
 
 	  end  
 	  
-	  def regerateEvent(intent,slots)
+	  def regenerateEvent(intent,slots)
         request = {
             type:'intent',
             intent: {
