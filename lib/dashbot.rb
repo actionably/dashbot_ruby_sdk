@@ -15,10 +15,10 @@ module Dashbot
 	  @source = 'ruby'
 	  @version = '0.0.1'
 	  
-	  def initialize(appToken, session)  
+	  def initialize(apiKey, session)  
 	    
-	    if session == nil or appToken == nil or appToken.length == 0
-	      puts "ERROR: invalid session or appToken passed"
+	    if session == nil or apiKey == nil or apiKey.length == 0
+	      puts "ERROR: invalid session or apiKey passed"
 	      return
 	    end
 
