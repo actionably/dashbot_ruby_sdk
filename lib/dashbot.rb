@@ -6,17 +6,17 @@ module Dashbot
 	require 'rest-client'
 
 	class DashbotSDK  
-
-	  @apiKey = ''  
-	  @session = nil
-	  @debug = false
-	  @urlRoot = 'https://tracker.dashbot.io'
-	  @platform = 'alexa'
-	  @source = 'ruby'
-	  @version = '0.0.1'
 	  
 	  def initialize(apiKey, session)  
-	    
+	  
+	  	@apiKey = ''  
+	  	@session = nil
+	  	@debug = false
+	  	@urlRoot = 'https://tracker.dashbot.io/track'
+	  	@platform = 'alexa'
+	  	@source = 'gem'
+	  	@version = Dashbot::VERSION
+	  	    
 	    if session == nil or apiKey == nil or apiKey.length == 0
 	      puts "ERROR: invalid session or apiKey passed"
 	      return
@@ -90,6 +90,12 @@ module Dashbot
 	          
 		event = regenerateEvent(intent_name,intent_request['intent']['slots'])
 
+	    begin
+	    	response = JSON.parse(response)
+	    rescue
+		    response = response
+		end
+
 	    #set data
 	    if response.is_a? String
 	        speechText = response
@@ -123,19 +129,17 @@ module Dashbot
         logOutgoing(event,responseGenerated)
 	  end  
 
-    def makeRequest(sURL,json)
+    def makeRequest(sURL,payload)
         begin
-	      sURL = "https://tracker.dashbot.io/track?apiKey=" + @apiKey + "&v=ruby_0.0.1"
-
 	      response = RestClient::Request.execute(method: :post, 
 	                                  url: sURL,
 	                                  payload: payload.to_json, 
 	                                  headers: {content_type: :json},
 	                                  timeout: 1)
-	      puts "response: " + response.to_json
 	      
 	    rescue Exception => e
 	      puts "Exception occurred: msg = " + e.message
+	      puts e.response.body
 	      puts e.backtrace.inspect
 		end
      end
@@ -150,7 +154,7 @@ module Dashbot
         data={
             event:event,
             }
-            
+                        
         makeRequest(url,data)
     end
             
