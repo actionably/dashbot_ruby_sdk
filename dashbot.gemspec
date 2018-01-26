@@ -6,7 +6,7 @@ require 'dashbot/version'
 Gem::Specification.new do |spec|
   spec.name          = "dashbot"
   spec.version       = Dashbot::VERSION
-  spec.authors       = ["ryanm"]
+  spec.authors       = ["ryanmdashbot"]
   spec.email         = ["ryanm@dashbot.io"]
 
   spec.summary       = "Dashbot Analytics SDK"
