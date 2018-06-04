@@ -35,7 +35,7 @@ module Dashbot
 	  
 	  def regenerateEvent(intent,slots)
         request = {
-            type:'intent',
+            type:'IntentRequest',
             intent: {
                 name:intent,
                 slots:slots
