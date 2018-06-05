@@ -7,7 +7,7 @@ module Dashbot
 
 	class DashbotSDK  
 	  
-	  def initialize(apiKey, session)  
+	  def initialize(apiKey, session = nil)
 	  
 	  	@apiKey = ''  
 	  	@session = nil
@@ -17,8 +17,8 @@ module Dashbot
 	  	@source = 'gem'
 	  	@version = Dashbot::VERSION
 	  	    
-	    if session == nil or apiKey == nil or apiKey.length == 0
-	      puts "ERROR: invalid session or apiKey passed"
+	    if apiKey == nil or apiKey.length == 0
+	      puts "ERROR: invalid apiKey passed"
 	      return
 	    end
 
@@ -144,30 +144,53 @@ module Dashbot
 		end
      end
      
-    def logIncoming(event)
+    def logIncoming(event, context = nil)
         url = @urlRoot + '?apiKey=' + @apiKey + '&type=incoming&platform='+ @platform + '&v=' + @version + '-' + @source
         
         if @debug
             puts 'Dashbot Incoming:'+url
             puts event
         end
+
+	    begin
+	    	event = JSON.parse(event)
+	    rescue
+		    event = event
+		end
+
         data={
             event:event,
+            context:context
             }
                         
         makeRequest(url,data)
     end
             
-    def logOutgoing(event,response)
+    def logOutgoing(event,response,context = nil)
         url = @urlRoot + '?apiKey=' + @apiKey + '&type=outgoing&platform='+ @platform + '&v=' + @version + '-' + @source
         
         if @debug
             puts 'Dashbot Outgoing:'+url
             puts event
+            puts response
         end
+
+	    begin
+	    	event = JSON.parse(event)
+	    rescue
+		    event = event
+		end
+
+	    begin
+	    	response = JSON.parse(response)
+	    rescue
+		    response = response
+		end
+
         data={
             event:event,
-            response:response            
+            response:response,
+            context:context
         }
         
         makeRequest(url,data)     
